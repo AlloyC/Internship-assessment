@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { API, type User } from "../types";
 
-const Users = createContext<{ modifiedUsers: User[] } | null>(null);
+const Users = createContext<{ modifiedUsers: User[]; cities: string[] } | null>(
+  null
+);
 
 export const useUsers = () => {
   const context = useContext(Users);
@@ -12,8 +14,8 @@ export const useUsers = () => {
 };
 
 const UserFilter = createContext<{
-  filterUsersByName: (name: string) => void;
-  filterUsersByCity: (city: string) => void;
+  setCity: React.Dispatch<React.SetStateAction<string>>;
+  setName: React.Dispatch<React.SetStateAction<string>>;
 } | null>(null);
 
 export const useUserFilter = () => {
@@ -27,6 +29,9 @@ export const useUserFilter = () => {
 const UsersContext = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [modifiedUsers, setModifiedUsers] = useState<User[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+  const [city, setCity] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   // Fetching Users
   const fetchUsers = async () => {
@@ -35,29 +40,55 @@ const UsersContext = ({ children }: { children: React.ReactNode }) => {
       const data = (await response.json()) as User[];
       setUsers(data);
       setModifiedUsers(data);
+      extractCities({ data });
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
+  // Extract unique cities
+  const extractCities = ({ data }: { data: User[] }) => {
+    const uniqueCities = Array.from(
+      new Set(data.map((user) => user.address.city))
+    );
+    setCities(uniqueCities);
+  };
+
+  //  Filter by name and city
   const filterUsersByName = (name: string) => {
-    const value = users.filter((user) => user.name.includes(name));
+    let filteredUsers = users;
+    if (city !== "") {
+      filteredUsers = filterUsersByCity(city);
+    }
+
+    const value = filteredUsers.filter((user) =>
+      user.name.toLowerCase().includes(name.toLowerCase())
+    );
     setModifiedUsers((prev) => (prev = value));
   };
 
-  //   Filter function
+  //   Filter by city function
   const filterUsersByCity = (city: string) => {
-    const value = users.filter((user) => user.address.city === city);
-    setModifiedUsers((prev) => (prev = value));
+    if (city === "") {
+      return users;
+    }
+    const value = users.filter(
+      (user) => user.address.city.toLowerCase() === city.toLowerCase()
+    );
+    return value;
   };
+
+  useEffect(() => {
+    filterUsersByName(name);
+  }, [city, name]);
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   return (
-    <Users.Provider value={{ modifiedUsers }}>
-      <UserFilter.Provider value={{ filterUsersByName, filterUsersByCity }}>
+    <Users.Provider value={{ modifiedUsers, cities }}>
+      <UserFilter.Provider value={{ setCity, setName }}>
         {children}
       </UserFilter.Provider>
     </Users.Provider>
