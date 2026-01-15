@@ -1,31 +1,17 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { PanelLeftOpen, PanelLeftClose, Menu, X } from "lucide-react";
 
 const Layout = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setIsOpen(false);
-      } else {
-        setIsOpen(true);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
-    <div className="relative flex gap-2 bg-gray-100 w-full overflow-x-hidden max-w-7xl">
+    <div className="bg-linear-to-b from-slate-900/20 to-indigo-950/20 relative flex gap-2 bg-gray-50 w-full overflow-x-hidden max-w-7xl">
       <Sidebar isOpen={isOpen} />
 
       <div className={` relative md:mx-5 flex-1 w-full min-h-full `}>
@@ -37,11 +23,18 @@ const Layout = () => {
         />
         <button
           onClick={handleToggle}
-          className="flex z-50 flex-col h-fit gap-0.5 shadow bg-gray-200/30 rounded absolute top-10 right-5 md:left-5 md:right-auto p-2"
+          className="flex z-50 flex-col h-fit gap-0.5 shadow bg-gray-200/30 rounded absolute top-12 md:top-12 right-7 md:-left-12 md:right-auto p-2"
         >
-          <span className="border w-3"></span>
-          <span className="border w-3"></span>
-          <span className="border w-3"></span>
+          {isOpen ? (
+            <PanelLeftClose className="hidden md:block w-6 h-6" />
+          ) : (
+            <PanelLeftOpen className="hidden md:block w-6 h-6" />
+          )}
+          {isOpen ? (
+            <X className="md:hidden w-6 h-6" />
+          ) : (
+            <Menu className="md:hidden w-6 h-6" />
+          )}
         </button>
         <Outlet />
       </div>
