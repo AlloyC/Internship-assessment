@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useGetPosts, usePosts } from "../providers/UserPostsContext";
 import { useEffect } from "react";
 import { ChevronLeft } from "lucide-react";

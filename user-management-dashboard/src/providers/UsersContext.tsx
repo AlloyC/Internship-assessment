@@ -64,7 +64,7 @@ const UsersContext = ({ children }: { children: React.ReactNode }) => {
     const value = filteredUsers.filter((user) =>
       user.name.toLowerCase().includes(name.toLowerCase())
     );
-    setModifiedUsers((prev) => (prev = value));
+    setModifiedUsers(value);
   };
 
   //   Filter by city function

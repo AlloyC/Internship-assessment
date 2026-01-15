@@ -27,13 +27,13 @@ const Dashboard = () => {
                 id=""
                 placeholder="Search by name"
                 className="border rounded px-2 py-1 pl-8 outline-none border-gray-300 placeholder:italic placeholder:text-gray-300"
-                onChange={(e) => setName((prev) => (prev = e.target.value))}
+                onChange={(e) => setName(e.target.value)}
               />
             </label>
             <select
               name="filter"
               id=""
-              onChange={(e) => setCity((prev) => (prev = e.target.value))}
+              onChange={(e) => setCity(e.target.value)}
               className="border rounded outline-none border-gray-300"
             >
               <option value="">Filter</option>
@@ -51,7 +51,7 @@ const Dashboard = () => {
             <select
               name="filter"
               id=""
-              onChange={(e) => setCity((prev) => (prev = e.target.value))}
+              onChange={(e) => setCity(e.target.value)}
               className="border rounded outline-none border-gray-300"
             >
               <option value="">Filter</option>
@@ -71,7 +71,7 @@ const Dashboard = () => {
                 id=""
                 placeholder="Search by name"
                 className="border rounded w-full px-2 py-1 pl-8 outline-none border-gray-300 placeholder:italic placeholder:text-gray-300"
-                onChange={(e) => setName((prev) => (prev = e.target.value))}
+                onChange={(e) => setName(e.target.value)}
               />
             </label>
           </form>
