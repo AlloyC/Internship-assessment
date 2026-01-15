@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useUserFilter, useUsers } from "../providers/UsersContext";
-import { Search } from "lucide-react";
+import { ExternalLink, Search } from "lucide-react";
+import { useState } from "react";
 
 const Dashboard = () => {
   const { modifiedUsers, cities } = useUsers();
   const { setCity, setName } = useUserFilter();
+  const [activeId, setActiveId] = useState<number | null>(null);
 
   return (
     <div className="my-3  bg-white p-5 shadow-md min-h-dvh rounded-md">
@@ -85,11 +87,22 @@ const Dashboard = () => {
                   className="flex-1"
                   key={user.id}
                 >
-                  <div className="rounded shadow p-3 min-w-max w-full hover:shadow-md hover:scale-105 hover:bg-gray-50/30 transition-shadow">
-                    <h4 key={user.id} className=" px-2 font-medium">
-                      <span className="w-max px-2 font-medium">Name: </span>
-                      <span>{user.name}</span>
-                    </h4>
+                  <div
+                    onMouseEnter={() => setActiveId(user.id)}
+                    onMouseLeave={() => setActiveId(null)}
+                    className="rounded shadow p-3 min-w-max w-full hover:shadow-md hover:scale-105 hover:bg-gray-50/30 transition-shadow"
+                  >
+                    <div className="flex justify-between">
+                      <h4 key={user.id} className=" px-2 font-medium">
+                        <span className="w-max px-2 font-medium">Name: </span>
+                        <span>{user.name}</span>
+                      </h4>
+                      <ExternalLink
+                        className={`inline-block ml-2 w-4 h-4 text-gray-400 ${
+                          activeId === user.id ? "visible" : "invisible"
+                        }`}
+                      />
+                    </div>
                     <p className=" px-2" key={user.id + "_email"}>
                       <span className="w-max px-2 font-medium">Email: </span>
                       <span>{user.email}</span>

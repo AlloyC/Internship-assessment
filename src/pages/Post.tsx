@@ -19,7 +19,10 @@ const Post = () => {
     <>
       <div className="py-5 rounded shadow flex items-center justify-between bg-white px-5 mb-5 mt-5 pl-16">
         <h3 className="font-medium text-xl">Posts by User ({userName})</h3>
-        <Link to={`/`} className="flex items-center hover:font-medium">
+        <Link
+          to={`/`}
+          className="hidden md:flex items-center hover:font-medium"
+        >
           <ChevronLeft />
           Back to Dashboard
         </Link>
